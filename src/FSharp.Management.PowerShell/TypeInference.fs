@@ -27,26 +27,30 @@ let getOutputTypes (command:CommandInfo) =
     | _ -> Array.empty
 
 let buildResultType (resultObjectTypes:Type[]) =
-    let tys =
-        resultObjectTypes
-        |> Array.map (fun ty ->
-            typedefof<list<_>>.MakeGenericType([|ty|]))
+    //let tys =
+    //    resultObjectTypes
+    //    |> Array.map (fun ty ->
+    //        typedefof<list<_>>.MakeGenericType([|ty|]))
     let choise =
-        match tys.Length with
-        | 1 -> tys.[0]
-        | 2 -> typedefof<Choice<_,_>>.MakeGenericType(tys)
-        | 3 -> typedefof<Choice<_,_,_>>.MakeGenericType(tys)
-        | 4 -> typedefof<Choice<_,_,_,_>>.MakeGenericType(tys)
-        | 5 -> typedefof<Choice<_,_,_,_,_>>.MakeGenericType(tys)
-        | 6 -> typedefof<Choice<_,_,_,_,_,_>>.MakeGenericType(tys)
-        | 7 -> typedefof<Choice<_,_,_,_,_,_,_>>.MakeGenericType(tys)
+        match resultObjectTypes.Length with
+        | 1 -> resultObjectTypes.[0]
+        | 2 -> typedefof<Choice<_,_>>.MakeGenericType(resultObjectTypes)
+        | 3 -> typedefof<Choice<_,_,_>>.MakeGenericType(resultObjectTypes)
+        | 4 -> typedefof<Choice<_,_,_,_>>.MakeGenericType(resultObjectTypes)
+        | 5 -> typedefof<Choice<_,_,_,_,_>>.MakeGenericType(resultObjectTypes)
+        | 6 -> typedefof<Choice<_,_,_,_,_,_>>.MakeGenericType(resultObjectTypes)
+        | 7 -> typedefof<Choice<_,_,_,_,_,_,_>>.MakeGenericType(resultObjectTypes)
         | _ -> typeof<PSObject> //TODO: test it
+    let orderedType =
+        typedefof<list<_>>.MakeGenericType([|choise|])
+
 
     let failType = 
         typeof<list<ErrorRecord>>
 
     let returnType = 
-        [|choise; failType|]
+        //[|choise; failType|]
+        [|orderedType; failType|]
 
     typedefof<PsCmdletResult<_,_>>.MakeGenericType(returnType)
 
@@ -79,10 +83,16 @@ type CollectionConverter<'T> =
     static member Convert (objSeq:obj seq) =
         objSeq |> Seq.cast<'T> |> Seq.toList
 
-let getTypeOfObjects (types:Type[]) (collection:PSObject seq) =
-    let typeCandidates =
-        types |> Array.filter (fun ty ->
-            collection |> Seq.map(fun x->x.BaseObject) |> Seq.forall (ty.IsInstanceOfType))
-    match typeCandidates with
-    | [|ty|] -> Some(ty)
-    | _ -> None
+
+//let getTypeOfObjects (types:Type[]) (collection:PSObject seq) =
+//    let typeCandidates =
+//        types 
+//        |> Array.filter (fun ty ->
+//            collection 
+//            |> Seq.map(fun x ->
+//                x.BaseObject) 
+//            |> Seq.exists (fun x ->
+//                (ty.IsInstanceOfType x) || (ty.IsInstanceOfType (unbox x))))
+//    match typeCandidates with
+//    | [||] -> None
+//    | _ -> Some(typeCandidates)

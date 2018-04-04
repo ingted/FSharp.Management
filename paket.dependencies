@@ -1,4 +1,4 @@
-source https://nuget.org/api/v2
+source http://nuget.org/api/v2
 
 nuget FSharp.Core ~> 3
 nuget System.Management.Automation_PowerShell_3.0
@@ -7,13 +7,13 @@ github fsprojects/FSharp.TypeProviders.StarterPack src/ProvidedTypes.fsi
 github fsprojects/FSharp.TypeProviders.StarterPack src/ProvidedTypes.fs
 
 group Test
-  source https://nuget.org/api/v2
+  source http://nuget.org/api/v2
   framework: net461
 
   nuget Expecto redirects:force
 
 group Build
-  source https://nuget.org/api/v2
+  source http://nuget.org/api/v2
   framework: net461
 
   nuget SourceLink.Fake

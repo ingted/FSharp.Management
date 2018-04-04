@@ -7,6 +7,7 @@ open System.Reflection
 [<assembly: AssemblyDescriptionAttribute("Various type providers for management of the machine.")>]
 [<assembly: AssemblyVersionAttribute("0.4.5")>]
 [<assembly: AssemblyFileVersionAttribute("0.4.5")>]
+[<assembly: AssemblyKeyFileAttribute("snk.snk")>]
 do ()
 
 module internal AssemblyVersionInformation =

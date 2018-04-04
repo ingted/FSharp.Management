@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>FSharp.Management</RootNamespace>
     <AssemblyName>FSharp.Management</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
     <Name>FSharp.Management</Name>
     <TargetFrameworkProfile />
@@ -82,8 +82,14 @@
     <Compile Include="StringReaderProvider.fs" />
     <Compile Include="SystemTypeProviders.fs" />
     <None Include="paket.references" />
+    <None Include="snk.snk" />
+    <Content Include="packages.config" />
+    <None Include="..\FSharp.Management.PowerShell\snk.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\..\packages\FSharp.Core.4.3.4\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />

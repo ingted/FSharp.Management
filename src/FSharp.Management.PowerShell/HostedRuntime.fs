@@ -14,6 +14,23 @@ type IPSRuntime =
     abstract member GetXmlDoc   : string -> string
     abstract member Runspace   : System.Management.Automation.Runspaces.Runspace
 
+ let makeListOf (listType : Type) (items : obj list)  =  
+         let add =  
+             let cons = 
+                 listType.GetMethod ("Cons")
+             
+             fun item list ->
+                 cons.Invoke (null, [| item; list; |])                
+ 
+         let list =  
+             let empty = 
+                 listType.GetProperty ("Empty") 
+             empty.GetValue (null)
+
+         list
+         |> List.foldBack add items
+
+
 /// PowerShell runtime built into the current process
 type PSRuntimeHosted(snapIns:string[], modules:string[]) =
     let runSpace =
@@ -124,37 +141,73 @@ type PSRuntimeHosted(snapIns:string[], modules:string[]) =
             let result = ps.Invoke()           
 
             // Infer type of the result
-            match getTypeOfObjects cmd.ResultObjectTypes result with
-            | None -> 
-                if ps.Streams.Error.Count > 0 then                       
+            //match getTypeOfObjects cmd.ResultObjectTypes result with
+            match ps.Streams.Error.Count > 0 with
+            | true -> 
+                //if ps.Streams.Error.Count > 0 then                       
                     let errors = ps.Streams.Error |> Seq.cast<ErrorRecord> |> List.ofSeq   
                     cmd.ResultType.GetMethod("NewFailure").Invoke(null, [|errors|])
-                else                    
-                    let boxedResult = if result.Count > 0 then
-                                            box (new PSObject(result))
-                                        else
-                                            box None
+                //else                    
+                //    let boxedResult = if result.Count > 0 then
+                //                            new PSObject(result)
+                //                            //box result
+                //                        else
+                //                            //box None
+                //                            null
 
-                    cmd.ResultType.GetMethod("NewSuccess").Invoke(null, [|boxedResult|])    // Result of execution is empty object
+                //    cmd.ResultType.GetMethod("NewSuccess").Invoke(null, [|boxedResult|])    // Result of execution is empty object
 
-            | Some(tyOfObj) ->
-                let collectionConverter =
-                    typedefof<CollectionConverter<_>>.MakeGenericType(tyOfObj)
-                let collectionObj =
-                    if (tyOfObj = typeof<PSObject>) then box result
-                    else result |> Seq.map (fun x->x.BaseObject) |> box
-                let typedCollection =
-                    collectionConverter.GetMethod("Convert").Invoke(null, [|collectionObj|])
+                    //cmd.ResultType.GetMethod("NewSuccess").Invoke(null, [|boxedResult|])    // Result of execution is empty object
+                    //box (FSharp.Management.PowerShellProviderTypes.PsCmdletResult<PSObject,PSObject>.Success boxedResult)
 
-                let choise =
-                    if (cmd.ResultObjectTypes.Length = 1)
-                    then typedCollection
-                    else let ind = cmd.ResultObjectTypes |> Array.findIndex (fun x-> x = tyOfObj)
-                         let funcName = sprintf "NewChoice%dOf%d" (ind+1) (cmd.ResultObjectTypes.Length)
-                         cmd.ResultType.GetGenericArguments().[0] // GenericTypeArguments in .NET 4.5
-                            .GetMethod(funcName).Invoke(null, [|typedCollection|])
+            //| Some(tyOfObj) ->
+            | false ->
+                let typDict =
+                    let dict = new System.Collections.Generic.Dictionary<System.Type,System.Int32> ()
+                    cmd.ResultObjectTypes
+                    |> Array.iteri (fun i t -> 
+                        match dict.ContainsKey(t) with
+                        | false ->
+                            dict.Add(t, i)
+                        | true -> 
+                            ()
+                        )
+                    dict
+                let typChoice = cmd.ResultType.GetGenericArguments().[0].GetGenericArguments().[0]
+                let typList = cmd.ResultType.GetGenericArguments().[0]
+                let listOfChoice =
+                    result
+                    |> Seq.map (fun x ->
+                        let ind = typDict.[x.BaseObject.GetType()]
+                        let funcName = sprintf "NewChoice%dOf%d" (ind+1) (cmd.ResultObjectTypes.Length)
+                         // GenericTypeArguments in .NET 4.5
+                        typChoice.GetMethod(funcName).Invoke(null, [|x.BaseObject|])
+                            )
+                     |> Seq.toList
+                //let theList = typList.GetMethod("Cons").Invoke(null, [|listOfChoice|])
+                let theList = makeListOf typList listOfChoice
+                cmd.ResultType.GetMethod("NewSuccess").Invoke(null, [|theList|])
 
-                cmd.ResultType.GetMethod("NewSuccess").Invoke(null, [|choise|])                
+
+
+
+                //let collectionConverter =
+                //    typedefof<CollectionConverter<_>>.MakeGenericType(tyOfObj)
+                //let collectionObj =
+                //    if (tyOfObj = [|typeof<PSObject>|]) then box result
+                //    else result |> Seq.map (fun x->x.BaseObject) |> box
+                //let typedCollection =
+                //    collectionConverter.GetMethod("Convert").Invoke(null, [|collectionObj|])
+
+                //let choise =
+                //    if (cmd.ResultObjectTypes.Length = 1)
+                //    then typedCollection
+                //    else let ind = cmd.ResultObjectTypes |> Array.findIndex (fun x->  Array.contains x tyOfObj)
+                //         let funcName = sprintf "NewChoice%dOf%d" (ind+1) (cmd.ResultObjectTypes.Length)
+                //         cmd.ResultType.GetGenericArguments().[0] // GenericTypeArguments in .NET 4.5
+                //            .GetMethod(funcName).Invoke(null, [|typedCollection|])
+
+                //cmd.ResultType.GetMethod("NewSuccess").Invoke(null, [|choise|])                
         member __.GetXmlDoc (cmdName:string) =
             if not <| xmlDocs.ContainsKey cmdName
                 then xmlDocs.Add(cmdName, getXmlDoc cmdName)
