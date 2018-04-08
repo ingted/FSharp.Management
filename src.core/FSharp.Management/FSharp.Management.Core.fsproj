@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="ProvidedTypes.fs" />
+    <None Include="ProvidedTypes.fsi" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="TypeProviders.Helper.fs" />
+    <Compile Include="FileSystemProvider.fs" />
+    <Compile Include="CommonFolders.fs" />
+    <Compile Include="StringReaderProvider.fs" />
+    <Compile Include="SystemTypeProviders.fs" />
+  </ItemGroup>
+
+  <ItemGroup />
+
+</Project>

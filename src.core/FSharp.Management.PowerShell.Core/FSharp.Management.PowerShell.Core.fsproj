@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="snk.snk" />
+    <None Include="ProvidedTypes.fsi" />
+    <Compile Include="ProvidedTypes.fs" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="TypeProviders.Helper.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="TypeInference.fs" />
+    <Compile Include="HostedRuntime.fs" />
+    <Compile Include="ExternalRuntime.fs" />
+    <Compile Include="Runtime.fs" />
+    <Compile Include="PowerShellProvider.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.Runtime.CoreCLR" Version="2.0.6" />
+    <PackageReference Include="Microsoft.PowerShell.NanoServer.NetCore.Library" Version="1.0.0" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.1" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.4.1" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.4.1" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.4.1" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.4.1" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.4.1" />
+  </ItemGroup>
+
+</Project>

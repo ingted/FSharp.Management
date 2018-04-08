@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="ProvidedTypes.fsi" />
+    <None Include="snk.snk" />
+    <Compile Include="ProvidedTypes.fs" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="TypeProviders.Helper.fs" />
+    <Compile Include="FileSystemProvider.fs" />
+    <Compile Include="CommonFolders.fs" />
+    <Compile Include="RegistryProvider.fs" />
+    <Compile Include="StringReaderProvider.fs" />
+    <Compile Include="SystemTypeProviders.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
+    <PackageReference Include="Microsoft.NETCore.Targets" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.4.0" />
+    <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.4.0" />
+    <PackageReference Include="runtime.any.System.Reflection" Version="4.3.0" />
+    <PackageReference Include="runtime.any.System.Reflection.Extensions" Version="4.3.0" />
+    <PackageReference Include="runtime.any.System.Reflection.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Context" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
+    <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
+  </ItemGroup>
+
+</Project>

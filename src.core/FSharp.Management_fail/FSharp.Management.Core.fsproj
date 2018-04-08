@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <FscToolPath>C:\Program Files (x86)\Microsoft SDKs\F#\10.1\Framework\v4.0</FscToolPath>
+    <FscToolExe>fsc.exe</FscToolExe>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="paket-files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ProvidedTypes.fsi" />
+    <Compile Include="ProvidedTypes.fs" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="TypeProviders.Helper.fs" />
+    <Compile Include="FileSystemProvider.fs" />
+    <Compile Include="CommonFolders.fs" />
+    <Compile Include="RegistryProvider.fs" />
+    <Compile Include="StringReaderProvider.fs" />
+    <Compile Include="SystemTypeProviders.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="runtime.any.System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
