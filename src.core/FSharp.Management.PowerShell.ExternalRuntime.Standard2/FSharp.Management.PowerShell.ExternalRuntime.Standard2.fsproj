@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--<TargetFramework>netstandard1.6</TargetFramework>-->
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="snk.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PowerShell.NanoServer.NetCore.Library" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FSharp.Management.PowerShell.Standard\FSharp.Management.PowerShell.Standard.fsproj" />
+    <ProjectReference Include="..\FSharp.Management.Standard\FSharp.Management.Standard.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Win32.Registry.AccessControl">
+      <HintPath>..\FSharp.Management.PowerShell.Standard\bin\Debug\net461\Microsoft.Win32.Registry.AccessControl.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <ProjectReference Include="..\FSharp.Management.PowerShell.Standard\FSharp.Management.PowerShell.Standard.fsproj" />
+    <ProjectReference Include="..\FSharp.Management.Standard\FSharp.Management.Standard.fsproj" />
+  </ItemGroup>-->
+
+</Project>

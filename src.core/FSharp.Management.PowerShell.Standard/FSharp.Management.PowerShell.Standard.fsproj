@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--<TargetFrameworks>netstandard2.0;net461</TargetFrameworks>-->
+    <TargetFrameworks>net461</TargetFrameworks>
+    <FscToolPath>C:\Program Files (x86)\Microsoft SDKs\F#\10.1\Framework\v4.0</FscToolPath>
+    <FscToolExe>fsc.exe</FscToolExe>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="ProvidedTypes.fsi" />
+    <Compile Include="ProvidedTypes.fs" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="TypeProviders.Helper.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="TypeInference.fs" />
+    <Compile Include="HostedRuntime.fs" />
+    <Compile Include="ExternalRuntime.fs" />
+    <Compile Include="Runtime.fs" />
+    <Compile Include="PowerShellProvider.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="snk.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
+    <PackageReference Include="Microsoft.PowerShell.NanoServer.NetCore.Library" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0-preview2-26406-04" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System.ServiceModel">
+      <!--<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ServiceModel.dll</HintPath>-->
+    </Reference>
+  </ItemGroup>
+
+</Project>
